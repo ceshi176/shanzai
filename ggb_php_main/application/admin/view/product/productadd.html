@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加产品</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__CSS__/animate.min.css" rel="stylesheet">
+    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="__JS__/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="__JS__/layui/css/layui.css"rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加产品</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="copyStrForm" method="post" action="{:url('product/checkProductInfoByCopyStr')}">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品推广信息带链接：</label>
+                            <div class="input-group col-sm-7">
+                                <textarea id="copy_str" rows="12" required="required" class="form-control" name="copy_str"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-8">
+                                <!--<input type="button" value="提交" class="btn btn-primary" id="postCopyStrForm"/>-->
+                                <button id="checkinfo" class="btn btn-primary" type="submit">查询相关信息</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div  style="display: none" class="form-group">
+                        <label class="col-sm-3 control-label">内容：</label>
+                        <div class="input-group col-sm-7">
+                            <script id="container" name="content" type="text/plain">
+                            </script>
+                        </div>
+                    </div>
+                    <form class="form-horizontal m-t" id="commentForm" style="display: none" method="post" action="{:url('product/productadd')}">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">产品标题：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="title" type="text" readonly class="form-control" name="title" required="" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">原价：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="price" readonly class="form-control" name="price" required="" aria-required="true">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">特惠价：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="prefer_price" readonly class="form-control" name="prefer_price" required="" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">多少元的优惠券：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="prefer_num" readonly class="form-control" name="prefer_num" required="" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group" id="pr_div" >
+                            <label class="col-sm-3 control-label">佣金比率：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="promotion_rate" readonly="readonly" onchange="this.value=validateNumber(2,2,this.value)" onkeyup="this.value=validateNumber(2,2,this.value)" onkeydown="this.value=validateNumber(2,2,this.value)" class="form-control" name="promotion_rate" required="" aria-required="true">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">总佣金：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="total_reward"  readonly class="form-control" name="total_reward" required="" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">推广人赚取的佣金：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="reward" readonly class="form-control" name="reward" required="" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">我方可得佣金：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="my_reward" readonly class="form-control" name="my_reward" required="" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品链接：</label>
+                            <div class="input-group col-sm-7">
+                                <textarea id="url" readonly rows="4" required="required" class="form-control" name="url"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所属商城：</label>
+                            <div class="input-group col-sm-7">
+                                <select class="form-control" id="mall_id" required="required" name="mall_id">
+                                    <option style="display: none"></option>
+                                    {foreach $mall as $vo}
+                                    <option value="{$vo.id}">{$vo.title} </option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品在其它商城的 ID：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="mall_goods_id" type="text" readonly class="form-control" name="mall_goods_id" required="" aria-required="true">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所属页面：</label>
+                            <div class="input-group col-sm-7">
+                                <select class="form-control" id="normal_id" name="normal_id">
+                                    <option style="display: none"></option>
+                                    {foreach $normal as $vo}
+                                    <option value="{$vo.id}">{$vo.title} </option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品的排序值：</label>
+                            <div class="input-group col-sm-7">
+                                <input id="sort_id" type="text" class="form-control" name="sort_id" required="" aria-required="true" value="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">缩略图：</label>
+                            <input name="thumbnail" id="thumbnail" type="hidden"/>
+                            <div class="form-inline">
+                                <div class="input-group col-sm-2">
+                                    <button type="button" class="layui-btn" id="test1">
+                                        <i class="layui-icon">&#xe67c;</i>上传图片
+                                    </button>
+                                </div>
+                                <div class="input-group col-sm-3">
+                                    <div id="sm"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-8">
+                                <!--<input type="button" value="提交" class="btn btn-primary" id="postform"/>-->
+                                <button class="btn btn-primary" type="submit">确认提交</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div style="display: none" class="form-group">
+                        <label class="col-sm-3 control-label">文章内容：</label>
+                        <div class="input-group col-sm-7">
+                            <script id="container" name="content" type="text/plain">
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="__JS__/jquery.min.js?v=2.1.4"></script>
+<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+<script src="__JS__/content.min.js?v=1.0.0"></script>
+<script src="__JS__/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+<script src="__JS__/plugins/validate/jquery.validate.min.js"></script>
+<script src="__JS__/plugins/validate/messages_zh.min.js"></script>
+<script src="__JS__/layui/layui.js"></script>
+<script src="__JS__/jquery.form.js"></script>
+<script src="__JS__/plugins/ueditor/ueditor.config.js"></script>
+<script src="__JS__/plugins/ueditor/ueditor.all.js"></script>
+<script type="text/javascript">
+
+    var index = '';
+    function showStart(){
+        index = layer.load(0, {shade: false});
+        return true;
+    }
+
+
+    // 提示框（成功与否）
+    function showSuccess(res){
+        layer.ready(function(){
+                layer.close(index);
+                if(1 == res.code){
+                    // 成功提示
+                    layer.alert(res.msg, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
+                        window.location.href = res.data;
+                    });
+                }else if(2 == res.code){
+                    //  如果返回值为 2 说明 ID 重复  弹窗提示。
+                    layer.confirm(res.msg, {icon: 3, title:'提示'}, function(index){
+                        //do something
+                        $.post(
+                            "{:url('product/productadd')}",
+                            {
+                                "title":$("#title").val(),
+                                "price":$("#price").val(),
+                                "prefer_price":$("#prefer_price").val(),
+                                "prefer_num":$("#prefer_num").val(),
+                                "reward":$("#reward").val(),
+                                "url":$("#url").val(),
+                                "mall_goods_id":$("#mall_goods_id").val(),
+                                "mall_id":$("#mall_id").val(),
+                                "normal_id":$("#normal_id").val(),
+                                "sort_id":$("#sort_id").val(),
+                                "thumbnail":$("#thumbnail").val(),
+                                "check":1
+                            },
+                            function (res) {
+                                if (1 == res.code){
+                                    layer.alert(res.msg, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
+                                        window.location.href = res.data;
+                                    });
+                                }else if(-1 == res.code){
+                                    layer.msg(res.msg);
+                                }else{
+                                    layer.alert(res.msg, {title: '友情提示', icon: 1, closeBtn: 0});
+                                }
+                                // window.location.href=res.data;
+                            }
+                        );
+                        // $.getJSON("{:url('product/productadd')}", {'check' : 1}, function(res){
+                        //     window.location.href = res.data;
+                        // });
+
+                        layer.close(index);
+                    })
+                }else if(111 === res.code){
+                    window.location.reload();
+                }else if(200 === res.code){
+                    layer.alert(res.msg, {title: '友情提示', icon: 1, closeBtn: 0}, function(index){
+                        $('#checkinfo').hide();
+                        $('#commentForm').show();
+                        $('#title').val(res.data.title);
+                        $('#price').val(res.data.price);
+                        $('#prefer_price').val(res.data.prefer_price);
+                        $('#prefer_num').val(res.data.prefer_num);
+                        $('#reward').val(res.data.reward);
+                        $('#url').val(res.data.url);
+                        $('#mall_goods_id').val(res.data.mall_goods_id);
+                        $('#my_reward').val(res.data.my_reward);
+                        $('#promotion_rate').val(res.data.promotion_rate);
+                        $('#total_reward').val(res.data.total_reward);
+                        $('#thumbnail').val(res.data.thumbnail);
+                        $("#sm").html('<img src="' + res.data.thumbnail + '" style="width:40px;height: 40px;"/>');
+                        // if (res.data.special_extend) {
+                        //     $('#pr_div').css('color','red');
+                        // }else {
+                        //     $('#promotion_rate').attr('readonly','readonly');
+                        // }
+                        layer.close(index);
+                    });
+
+                }else {
+                    layer.msg(res.msg, {anim: 6});
+                }
+            layer.close(index);
+        });
+    }
+
+    $(document).ready(function(){
+        // 添加角色
+        var options = {
+            beforeSubmit:showStart,
+            success:showSuccess
+        };
+
+        $('#commentForm').submit(function(){
+            $(this).ajaxSubmit(options);
+            return false;
+        });
+        $('#copyStrForm').submit(function(){
+            $(this).ajaxSubmit(options);
+            return false;
+        });
+
+        $('#keywords').tagsinput('add', 'some tag');
+        $(".bootstrap-tagsinput").addClass('col-sm-12').find('input').addClass('form-control')
+            .attr('placeholder', '输入后按enter');
+
+        $('#promotion_rate').bind('input propertychange',function () {
+            // 总佣金
+            $('#total_reward').val(($('#prefer_price').val() * $('#promotion_rate').val()).toFixed(2));
+            // 推广人可赚的佣金
+            $('#reward').val(($('#total_reward').val() * 0.9).toFixed(2));
+            // 我方可得佣金
+            $('#my_reward').val(($('#total_reward').val() - $('#reward').val()).toFixed(2));
+        });
+
+        // 上传图片
+        layui.use('upload', function(){
+            var upload = layui.upload;
+
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#test1' //绑定元素
+                ,url: "{:url('product/uploadImg')}" //上传接口
+                ,done: function(res){
+                    //上传完毕回调
+                    $("#thumbnail").val(res.data.src);
+                    $("#sm").html('<img src="' + res.data.src + '" style="width:40px;height: 40px;"/>');
+                }
+                ,error: function(){
+                    //请求异常回调
+                }
+            });
+        });
+
+        var editor = UE.getEditor('container');
+
+    });
+
+    // 表单验证
+    $.validator.setDefaults({
+        highlight: function(e) {
+            $(e).closest(".form-group").removeClass("has-success").addClass("has-error")
+        },
+        success: function(e) {
+            e.closest(".form-group").removeClass("has-error").addClass("has-success")
+        },
+        errorElement: "span",
+        errorPlacement: function(e, r) {
+            e.appendTo(r.is(":radio") || r.is(":checkbox") ? r.parent().parent().parent() : r.parent())
+        },
+        errorClass: "help-block m-b-none",
+        validClass: "help-block m-b-none"
+    });
+
+
+    /**
+     * 正数 范围  有小数 设置type=number 默认将.结尾的去掉
+     * @param precision
+     * @param scale
+     * @param value
+     * @returns {*}
+     */
+    function validateNumber(precision,scale,value)
+    {
+        //不符合 数字
+        if (isNaN(value))
+        {
+            if(value == '.')
+            {
+                return "";
+            }
+
+            // 两个.  不符合规范
+            if(value.split('.').length > 2)
+            {
+                return $.trim(value.substr(0,value.length-1));
+            }
+            //解决 中文输入bug
+            return $.trim(value.replace(/[^0-9|^.]/g,''));
+        }
+
+
+        var tmpVal = parseFloat(value);
+
+        if(value != "")
+        {
+            var valueArray = value.split('.');
+
+            //去前缀0   例如 01 001
+            if(value.indexOf('.') == value.length - 1)
+            {
+                value = parseFloat(value);
+
+                value = value + ".";
+            }
+            else if(valueArray.length == 2)
+            {
+                value = parseFloat(value);
+
+                var val1 = parseFloat(valueArray[1]);
+
+                if(val1 == 0)
+                {
+                    value = value + ".";
+
+                    for(var i = 0; i < valueArray[1].length; i++)
+                    {
+                        value += "0";
+                    }
+                }
+                else
+                {
+                    value = value + "";
+                }
+            }
+            else
+            {
+                value = parseFloat(value);
+
+                value = value + "";
+            }
+
+        }
+
+        var maxVal = '';
+
+        //var minVal = '-'; //如果还需要判断负数 将0换成minVal
+
+        if(precision <= 0 || scale < 0 || scale > precision)
+        {
+            alert("validateNumber函数参数错误！");
+
+            return '';
+        }
+
+        //整数位数小
+        for (var i = 0;i < precision-scale; i++)
+        {
+            maxVal += '9';
+        }
+
+        //有小数
+        if(scale > 0)
+        {
+            maxVal += '.';
+
+            for(var i = 0;i < scale;i++)
+            {
+                maxVal += '9';
+            }
+        }
+        else
+        {
+            //判断是否有小数  删除小数点和小数点后面的数
+            if((value.indexOf('.')+1) > 0)
+            {
+                return $.trim(value.substr(0,value.length-1));
+            }
+        }
+
+        if(tmpVal >= 0 && tmpVal <= maxVal)
+        {
+            if(scale > 0)
+            {
+                //判断是否有小数   小数长度不能超过scale
+                if(value.indexOf('.') > 0)
+                {
+                    if(value.substr(value.indexOf('.')+1,value.length-1).length > scale)
+                    {
+                        return $.trim(value.substr(0,value.length-1));
+                    }
+                }
+            }
+
+            return $.trim(value);
+        }
+        else
+        {
+            return $.trim(value.substr(0,value.length-1));
+        }
+    }
+
+</script>
+</body>
+</html>

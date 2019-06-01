@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>{$normal.title}</title>
+		<link rel="stylesheet" href="css/css.css">
+		<script src="js/jquery-1.9.1.js" type="text/javascript"></script>
+	</head>
+
+	<body>
+		<!-- 顶部图片 -->
+
+		<div class="k_index_content body_inner">
+			<!-- 顶图 -->
+			<div class="imgBox">
+				<img src="{$normal.topimg}">
+			</div>
+			<!-- 标题图片 -->
+			<div class="header imgBox">
+				{if $normal.producttitle}
+				<img class="title" src="{$normal.producttitle}">
+				{/if}
+			</div>
+
+			<div class="content">
+				<ul class="k_list {$normal.sort_type}">
+					<!-- 两列 -->
+					{foreach $product as $vo}
+					<li class="tubtn" mall_id="{$vo.mall_id}" auto="{$vo.mall_goods_id}" srcurl="{$vo.url}">
+						<div class="img">
+							<img  src="{$vo.thumbnail}" alt="">
+						</div>
+						<div class="text">
+							<div class="title">{$vo.title}</div>
+							<div class="price">
+								特惠价￥<span class="z01">{$vo.prefer_price}</span>
+								<span class="z02">￥{$vo.price}</span>
+							</div>
+							<div class="juan">
+								<span>{$vo.prefer_num}元券</span>
+							</div>
+							<p class="links" >赚￥{$vo.reward}</p>
+						</div>
+					</li>
+					{/foreach}
+					<!--<li class="tubtn" auto="1111">-->
+						<!--<div class="img">-->
+							<!--<img shopurl="https://mobile.yangkeduo.com/duo_coupon_landing.html?goods_id=5295736&pid=1975836_54933970&cpsSign=CC1975836_54933970_a9f2437786f43e62e61d7bf0a86e286d&duoduo_type=2" src="h5/hongbao.jpg" alt="">-->
+						<!--</div>-->
+						<!--<div class="text">-->
+							<!--<div class="title">卡祎汽车用品可伸缩蜡拖除尘车掸子擦车拖把洗车刷车刷子清洁工具</div>-->
+							<!--<div class="price">-->
+								<!--特惠价￥<span class="z01">2</span>-->
+								<!--<span class="z02">￥11</span>-->
+							<!--</div>-->
+							<!--<div class="juan">-->
+								<!--<span>9元券</span>-->
+							<!--</div>-->
+							<!--<p class="links" href="https://mobile.yangkeduo.com/duo_coupon_landing.html?goods_id=5295736&pid=1975836_54933970&cpsSign=CC1975836_54933970_a9f2437786f43e62e61d7bf0a86e286d&duoduo_type=2">赚￥</p>-->
+						<!--</div>-->
+					<!--</li>-->
+					
+				</ul>
+
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		//点击返回上一页
+		function getQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if(r != null) return decodeURI(r[2]);
+			return null;
+
+		}
+		//判断是否微信打开
+		function is_weixn() {
+			var ua = navigator.userAgent.toLowerCase();
+			if(ua.match(/MicroMessenger/i) == "micromessenger") {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		// 需要更换链接
+		var _JumpUrl = "{$normal.url}?v=" + Math.random();
+		var _ServerUrl = "http://api.gangubang.net";
+		// cs.ssup.cn  是测试服域名
+		// 上线正式服 需要把 Domain 修改为 http://api.gangubang.net
+		var Domain = 'http://cs.ssup.cn';
+		var id;
+		var unionid;
+		var openId;
+		var nickname;
+		var headimgurl;
+		var userid;
+		var blon = "";
+		$(function() {
+			if(is_weixn()){
+				$('.links').html("立即抢购")
+				blon = getQueryString("blon");
+				unionid = getQueryString("unionid")
+				openId = getQueryString("openId")
+				nickname = getQueryString("nickName")
+				headimgurl = getQueryString("headimgurl")
+				id = getQueryString("id");
+				if(openId == null || unionid == null) {
+					window.location.href = _ServerUrl + "/m-WeiXin/WXApi/WXAuthorize?returnUrl=" + _JumpUrl + "%26id=" + id + "&backUrl="
+				}
+			}
+			panduan();
+			if(blon == "true") {
+				$("#fanhui").show();
+			} else {
+				$("#fanhui").hide()
+			}
+			//點擊按鈕返回
+			$(".footer img").click(function() {
+				$("html,body").animate({
+					scrollTop: 0
+				}, 500);
+			});
+
+			//給原生穿參數
+//			$("li").on("click", function() {
+//				var num = $(this).attr("auto");
+//				if(num != "") {
+//					var u = navigator.userAgent,
+//						app = navigator.appVersion;
+//					var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+//					var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+//					//alert('是否是Android：'+isAndroid);
+//					//alert('是否是iOS：'+isiOS);
+//					if(isAndroid) {
+//						window.zf.PushActivity(num);
+//					} else {
+//						PushActivity(num);
+//					}
+//
+//				}
+//			})
+			$("#fanhui").on("click", function() {
+				var u = navigator.userAgent,
+					app = navigator.appVersion;
+				var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+				var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+				//alert('是否是Android：'+isAndroid);
+				//alert('是否是iOS：'+isiOS);
+				if(isAndroid) {
+					window.zf.back();
+				} else {
+					back();
+				}
+			})
+			//點擊事件
+			$(".tubtn").on("click", function() {
+				var mallid = $(this).attr('mall_id')
+				var shangpinid = $(this).attr("auto")
+				var shangpinurl = $(this).attr("srcurl")
+				var datajson = JSON.stringify({
+					"Token": '',
+					"Type": "",
+					"V": "",
+					"ReqData": {
+						"Source": mallid,
+						"Url": shangpinurl,
+						"ProductId": shangpinid,
+						"UserId": userid
+					}
+
+				});
+
+				$.ajax({
+					type: "post",
+					url: Domain + "/api/MoreShop/PostUrlToJifeiUrlNoVerification",
+					data: datajson,
+					async: true,
+					contentType: "application/json;charset=utf-8",
+					dataType: "json",
+					success: function(res) {
+						console.log(res)
+						if(res.Success == true) {
+							window.location.href = res.Data.JifeiUrl
+						}
+					},
+					error: function(err) {
+						console.log(err)
+					}
+				});
+
+			})
+		})
+		//判断
+		function panduan() {
+			datajson = JSON.stringify({
+				"unionid": unionid,
+				"tuijianuid": id,
+				"openid": openId,
+				"nickname": nickname,
+				"headimgurl": headimgurl
+			});
+			$.ajax({
+				type: "post",
+				url: Domain + "/api/Account/GetUserInfoByUnionIdForXCX",
+				data: datajson,
+				async: true,
+				contentType: "application/json;charset=utf-8",
+				dataType: "json",
+				success: function(res) {
+					if(res.ErrCode == "Success") {
+						userid = res.Data.info.Id
+					}
+
+				},
+				error: function(err) {
+					console.log(err)
+				}
+			});
+		}
+	</script>
+
+</html>

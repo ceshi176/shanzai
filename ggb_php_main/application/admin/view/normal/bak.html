@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title></title>
+	<link rel="stylesheet" href="__NORMALCSS__/css.css">
+</head>
+
+<body>
+	<!-- 顶部图片 -->
+
+	<div class="k_index_content body_inner">
+		<div class="imgBox">
+			<img src="{$topimg}">
+		</div>
+		<div class="header imgBox">
+			{if $producttitle}
+			 <img class="title" src="{$producttitle}">
+			{/if}
+		</div>
+
+	<!-- 	<div class="header">
+			<div class="title">标题</div>
+		</div> -->
+		<div class="content">
+			<!-- 单列 -->
+			<ul class="k_list t_list">
+				{foreach $product as $vo}
+				<li>
+					<div class="img">
+						<a href="{$vo.url}"><img src="{$vo.thumbnail}" alt=""></a>
+					</div>
+					<div class="text">
+						<div class="title">{$vo.title}</div>
+						<div class="price">
+							特惠价￥<span class="z01">{$vo.prefer_price}</span>
+							<span class="z02">￥{$vo.price}</span>
+						</div>
+						<div class="juan">
+							<span>{$vo.prefer_num}元券</span>
+						</div>
+						<a class="links" href="{$vo.url}">立即抢购</a>
+					</div>
+				</li>
+				{/foreach}
+				<!--<li>-->
+					<!--<div class="img">-->
+						<!--<a href="javascript:;"><img src="images/goods_03.png" alt=""></a>-->
+					<!--</div>-->
+					<!--<div class="text">-->
+						<!--<div class="title">电动牙刷电动牙刷电动牙刷电动牙刷电动牙刷</div>-->
+						<!--<div class="price">-->
+							<!--特惠价￥<span class="z01">20</span>-->
+							<!--<span class="z02">￥30</span>-->
+						<!--</div>-->
+						<!--<div class="juan">-->
+							<!--<span>10元券</span>-->
+						<!--</div>-->
+						<!--<a class="links" href="javascript:;">立即抢购</a>-->
+					<!--</div>-->
+				<!--</li>-->
+			</ul>
+
+		</div>
+	</div>
+</body>
+
+</html>
